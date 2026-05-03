@@ -5,18 +5,7 @@ import { createCarDto, UpdateCarDto } from './dto';
 
 @Injectable()
 export class CarsService {
-    private cars: Car[] = [
-                { id: uuid(), make: 'Toyota', model: 'Corolla', year: '2020' },
-                { id: uuid(), make: 'Honda', model: 'Civic', year: '2021' },
-                { id: uuid(), make: 'Ford', model: 'Focus', year: '2019' },
-                { id: uuid(), make: 'Chevrolet', model: 'Malibu', year: '2018'},
-                { id: uuid(), make: 'Nissan', model: 'Altima', year: '2022' },
-                { id: uuid(), make: 'Hyundai', model: 'Elantra', year: '2023' },
-                { id: uuid(), make: 'Kia', model: 'Forte', year: '2021' },
-                { id: uuid(), make: 'Volkswagen', model: 'Jetta', year: '2020' },
-                { id: uuid(), make: 'Subaru', model: 'Impreza', year: '2019' },
-                { id: uuid(), make: 'Mazda', model: '3', year: '2022' },
-    ];
+    private cars: Car[] = [];
 
    findAll() {
         return this.cars;
@@ -32,18 +21,18 @@ export class CarsService {
     create( createCarDto: createCarDto) {
         const newCar: Car = {
             id: uuid(),
-            make: createCarDto.make,
+            brand: createCarDto.brand,
             model: createCarDto.model,
             year: createCarDto.year, // Assuming year is part of the DTO
         };
         //validate if the car already exists
-        const existingCar = this.cars.find(car => car.make === newCar.make && car.model === newCar.model && car.year === newCar.year);
+        const existingCar = this.cars.find(car => car.brand === newCar.brand && car.model === newCar.model && car.year === newCar.year);
         if (existingCar) {
-            throw new NotFoundException(`Car with make ${newCar.make}, model ${newCar.model}, and year ${newCar.year} already exists`);
+            throw new NotFoundException(`Car with brand ${newCar.brand}, model ${newCar.model}, and year ${newCar.year} already exists`);
         }
         // Add the new car to the cars array
-        if (!newCar.make || !newCar.model || !newCar.year) {
-            throw new NotFoundException(`Car with make ${newCar.make}, model ${newCar.model}, and year ${newCar.year} is not valid`);
+        if (!newCar.brand || !newCar.model || !newCar.year) {
+            throw new NotFoundException(`Car with brand ${newCar.brand}, model ${newCar.model}, and year ${newCar.year} is not valid`);
         }
         this.cars.push(newCar);
         console.log(`Car created: ${JSON.stringify(newCar)}`);
@@ -85,5 +74,9 @@ export class CarsService {
             method: 'DELETE',
             id: id,
         };
+    }
+
+    fillCarsWithSeedData(cars: Car[]) {
+        return this.cars = cars;
     }
 }
