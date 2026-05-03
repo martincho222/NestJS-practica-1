@@ -1,98 +1,212 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="_blank">
+    <img src="https://nestjs.com/img/logo-small.svg" width="100" alt="NestJS Logo" />
+  </a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h1 align="center">Car Dealership API</h1>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  A RESTful API for managing a car dealership's vehicle and brand inventory, built with <a href="http://nestjs.com/" target="_blank">NestJS</a> and TypeScript.
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+<p align="center">
+  <img src="https://img.shields.io/badge/NestJS-11-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Node.js-22-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/License-UNLICENSED-lightgrey?style=flat-square" alt="License" />
+</p>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## Table of Contents
+
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [API Reference](#api-reference)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+
+---
+
+## Overview
+
+**Car Dealership API** provides full CRUD operations for two core resources — **Cars** and **Brands** — and exposes a `/seed` endpoint to populate the in-memory store with realistic sample data. All identifiers are UUID v4 and all incoming payloads are validated via `class-validator`.
+
+> **Note:** Data is stored in-memory. It resets on every server restart. A seed endpoint is provided to quickly restore sample data.
+
+---
+
+## Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| [NestJS](https://nestjs.com/) | ^11.0 | Application framework |
+| [TypeScript](https://www.typescriptlang.org/) | ^5.7 | Language |
+| [class-validator](https://github.com/typestack/class-validator) | ^0.14 | DTO validation |
+| [class-transformer](https://github.com/typestack/class-transformer) | ^0.5 | Object transformation |
+| [uuid](https://github.com/uuidjs/uuid) | ^11.0 | Unique ID generation |
+| [Jest](https://jestjs.io/) | ^29.7 | Unit & E2E testing |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18
+- npm >= 9
+
+### Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+### Running the Application
 
 ```bash
-# development
-$ npm run start
+# Development (watch mode)
+npm run start:dev
 
-# watch mode
-$ npm run start:dev
+# Production build
+npm run build
+npm run start:prod
 
-# production mode
-$ npm run start:prod
+# Debug mode
+npm run start:debug
 ```
 
-## Run tests
+The API will be available at **`http://localhost:3000`**.
+
+To populate the database with sample data after startup:
+
+```
+GET http://localhost:3000/seed
+```
+
+---
+
+## API Reference
+
+### Cars
+
+Base path: `/cars`
+
+| Method | Endpoint    | Description           | Body required |
+|--------|-------------|-----------------------|:---:|
+| `GET`    | `/cars`     | Retrieve all cars     | No |
+| `GET`    | `/cars/:id` | Retrieve a car by ID  | No |
+| `POST`   | `/cars`     | Create a new car      | Yes |
+| `PATCH`  | `/cars/:id` | Update a car by ID    | Yes |
+| `DELETE` | `/cars/:id` | Delete a car by ID    | No |
+
+**Request body** (`POST` / `PATCH`):
+
+```json
+{
+  "brand": "Toyota",
+  "model": "Camry",
+  "year": "2023"
+}
+```
+
+**Response example** (`GET /cars/:id`):
+
+```json
+{
+  "id": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+  "brand": "Toyota",
+  "model": "Camry",
+  "year": "2023"
+}
+```
+
+---
+
+### Brands
+
+Base path: `/brands`
+
+| Method | Endpoint      | Description             | Body required |
+|--------|---------------|-------------------------|:---:|
+| `GET`    | `/brands`     | Retrieve all brands     | No |
+| `GET`    | `/brands/:id` | Retrieve a brand by ID  | No |
+| `POST`   | `/brands`     | Create a new brand      | Yes |
+| `PATCH`  | `/brands/:id` | Update a brand by ID    | Yes |
+| `DELETE` | `/brands/:id` | Delete a brand by ID    | No |
+
+**Request body** (`POST` / `PATCH`):
+
+```json
+{
+  "name": "Toyota"
+}
+```
+
+**Response example** (`GET /brands/:id`):
+
+```json
+{
+  "id": "c5073cb1-a8f4-4a2d-b0a3-29cf78d8b73f",
+  "name": "Toyota",
+  "createdAt": 1714694400000,
+  "updatedAt": 1714694500000
+}
+```
+
+---
+
+### Seed
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET`    | `/seed`  | Populate the in-memory store with sample cars and brands |
+
+Preloads vehicles from brands including Toyota, Honda, BMW, Mercedes-Benz, Volkswagen, and Ford.
+
+---
+
+## Testing
 
 ```bash
-# unit tests
-$ npm run test
+# Unit tests
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Unit tests in watch mode
+npm run test:watch
 
-# test coverage
-$ npm run test:cov
+# Test coverage report
+npm run test:cov
+
+# End-to-end tests
+npm run test:e2e
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Project Structure
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+src/
+├── cars/
+│   ├── dto/                  # CreateCarDto, UpdateCarDto
+│   ├── interfaces/           # Car interface
+│   ├── cars.controller.ts    # Route handlers
+│   ├── cars.service.ts       # Business logic & in-memory store
+│   └── cars.module.ts
+├── brands/
+│   ├── dto/                  # CreateBrandDto, UpdateBrandDto
+│   ├── entities/             # Brand entity class
+│   ├── brands.controller.ts
+│   ├── brands.service.ts
+│   └── brands.module.ts
+├── seed/
+│   ├── data/                 # cars.seed.ts, brands.seed.ts
+│   ├── seed.controller.ts
+│   ├── seed.service.ts
+│   └── seed.module.ts
+├── app.module.ts
+└── main.ts
+```
